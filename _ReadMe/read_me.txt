@@ -1,13 +1,20 @@
+=============================
 1.project requiremnts
+=============================
 
 php 8.2
 laravel 12
 mysql
 
-the project Repository
+==============================
+2.clone the project Repository
+==============================
 
-===================
-2.edit db connection data in .env file
+https://github.com/andrewakram/lookfindr
+
+==============================
+3.edit db connection data in .env file
+==============================
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -16,8 +23,10 @@ DB_DATABASE=lookfindr_app
 DB_USERNAME=root
 DB_PASSWORD=
 
-===================
-3. run command "php artisan migrate --seed"
-
-===================
-4.
+=============================
+4. run command "php artisan migrate --seed"
+=============================
+5.see the postman collection in the ReadMe folder
+=============================
+6.see the attached images in the ReadMe folder
+=============================
