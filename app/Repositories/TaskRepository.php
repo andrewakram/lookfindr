@@ -25,12 +25,7 @@ class TaskRepository implements TaskRepositoryInterface {
             'due_date'      => empty($data['due_date']) ? now()->addHours(24) : $data['due_date'],
         ]);
 
-        TaskLog::create([
-            'user_id'   => auth()->user()->id,
-            'task_id'   => $task->id,
-            'old_value' => null,
-            'new_value' => json_encode($task),
-        ]);
+        $this->createTaskLog($task->id,null,json_encode($task));
 
         \DB::commit();
 
@@ -42,14 +37,12 @@ class TaskRepository implements TaskRepositoryInterface {
     {
         \DB::beginTransaction();
 
+        $oldValues = $task->toArray();
+
         $task->update(['user_id' => $data['member_id']]);
 
-        TaskLog::create([
-            'user_id'   => auth()->user()->id,
-            'task_id'   => $task->id,
-            'old_value' => json_encode($task),
-            'new_value' => json_encode($this->findTask($task->id)),
-        ]);
+        $this->createTaskLog($task->id,json_encode($oldValues),json_encode($task->fresh()->toArray()));
+
         event(new TaskAssigned($task));
 
         \DB::commit();
@@ -72,5 +65,14 @@ class TaskRepository implements TaskRepositoryInterface {
             ->orderBy('created_at', 'desc')
             ->get();
 
+    }
+
+    public function createTaskLog($taskId,$oldValues,$newValues){
+        TaskLog::create([
+            'user_id'   => auth()->user()->id,
+            'task_id'   => $taskId,
+            'old_value' => $oldValues,
+            'new_value' => $newValues,
+        ]);
     }
 }
